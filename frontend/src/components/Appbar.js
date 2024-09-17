@@ -17,7 +17,7 @@ const Appbar = () => {
                 </a>
                 {
                     auth ? 
-                    <NavLink to="/profile" className="text-md font-semibold rounded-xl px-3 py-1 box-border border-2 border-gray-800 transition hover:bg-gray-200 active:scale-95"> Profile </NavLink>
+                    <NavLink to="/dashboard" className="text-md font-semibold rounded-xl px-3 py-1 box-border border-2 border-gray-800 transition hover:bg-gray-200 active:scale-95"> Profile </NavLink>
                     : <NavLink to="/login" className="text-md font-semibold rounded-xl px-3 py-1 box-border border-2 border-gray-800 transition hover:bg-gray-200 active:scale-95"> Login </NavLink>
                 }
             </div>
