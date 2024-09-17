@@ -37,13 +37,9 @@ class LoginForm extends Component {
     }
 
     render() {
-        const { user } = this.props;
+        // const { user } = this.props;
         const { isFetching, error, email, password } = this.state;
         const disableBtn = isFetching || error || !email || !password;
-
-        // if (user.authorized) {
-        //     return <Redirect to="/" />;
-        // }
 
         return (
             <motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>

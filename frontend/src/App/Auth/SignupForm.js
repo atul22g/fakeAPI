@@ -21,26 +21,21 @@ class SignupForm extends Component {
         password: '',
         confirmPassword: '',
         errors: null,
-        isFetching: "",
+        isfetching: false,
     };
 
     render() {
-        // const { user } = this.props;
-        const { isFetching, errors, name, email, password, confirmPassword } =
+        const { isfetching, errors, name, email, password, confirmPassword } =
             this.state;
 
         const disableBtn =
-            isFetching ||
+            isfetching ||
             !name ||
             !isEmail(email) ||
             !password ||
             !password.length ||
             !confirmPassword ||
             password !== confirmPassword;
-
-        // if (user.authorized) {
-        //     return <Redirect to="/" />;
-        // }
 
         return (
             <motion.div initial={{ opacity: 0.5 }} animate={{ opacity: 1 }}>
@@ -67,7 +62,7 @@ class SignupForm extends Component {
                                     name="name"
                                     type="name"
                                     autoComplete="on"
-                                    disabled={isFetching}
+                                    disabled={isfetching}
                                     value={name}
                                     onChange={this.onChange}
                                 />
@@ -84,7 +79,7 @@ class SignupForm extends Component {
                                     name="email"
                                     type="email"
                                     autoComplete="on"
-                                    disabled={isFetching}
+                                    disabled={isfetching}
                                     value={email}
                                     onChange={this.onChange}
                                 />
@@ -100,7 +95,7 @@ class SignupForm extends Component {
                                     placeholder="..."
                                     name="password"
                                     type="password"
-                                    disabled={isFetching}
+                                    disabled={isfetching}
                                     value={password}
                                     onChange={this.onChange}
                                 />
@@ -110,7 +105,7 @@ class SignupForm extends Component {
                                     placeholder="..."
                                     name="confirmPassword"
                                     type="password"
-                                    disabled={isFetching}
+                                    disabled={isfetching}
                                     value={confirmPassword}
                                     onChange={this.onChange}
                                 />
@@ -143,13 +138,11 @@ class SignupForm extends Component {
 
     onSubmit = event => {
         const { name, email, password, confirmPassword } = this.state;
-        console.log("onSubmit");
-        console.log(name, email, password, confirmPassword);
         
         event.preventDefault();
 
         if (isEmail(email) && password && password === confirmPassword) {
-            this.setState({ isFetching: true });
+            this.setState({ isfetching: true });
             this.props.signup({ name, email, password, callback: this.onResponse });
         }
     };
@@ -159,7 +152,7 @@ class SignupForm extends Component {
             return this.setState({
                 errors,
                 success: !errors,
-                isFetching: false,
+                isfetching: false,
             });
         }
 

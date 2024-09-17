@@ -1,6 +1,7 @@
 import { DONATE, EMAIL_UPDATE } from '../reducers/forms';
 import { deleteToken, getToken, saveToken } from './utils';
 import { handleFormError, hideForm, submitForm } from './forms';
+import { toast } from 'react-toastify';
 
 export const ME = 'auth/me';
 export const LOGIN = 'auth/login';
@@ -122,12 +123,14 @@ export const checkout = plan => async dispatch => {
 export const login =
   ({ email, password, callback }) =>
     async dispatch => {
+      console.log("adfff");
+      console.log(email, password);
       const body = JSON.stringify({ email, password });
       const headers = { 'Content-Type': 'application/json' };
 
       let res = null;
       try {
-        res = await fetch('/auth/local', {
+        res = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/user/auth', {
           method: 'POST',
           headers,
           body,
@@ -146,37 +149,35 @@ export const login =
       }
     };
 
-export const signup =
-  ({ name, email, password, callback }) =>
-    async dispatch => {
-      console.log("signup");
-      
-      const body = JSON.stringify({ name, email, password });
-      console.log(body); 
 
-      let res = null;
-      try {
-        res = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/user/create', {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          body,
-        }).then(res => res.json());
-        console.log("res");
-        console.log(res.json());
+export const signup = ({ name, email, password, callback }) =>
+  async dispatch => {
+    const body = JSON.stringify({ name, email, password });
 
-        if (res.errors) {
-          return callback(res.errors);
-        }
-        saveToken(res.token);
-        await dispatch(me());
-        callback();
-      } catch (error) {
-        callback(error);
+    let res = null;
+    try {
+      res = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/user/create', {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        },
+        body,
+      });
+      const res_data = await res.json();
+      if (res.ok) {
+        toast.success("Login successful");
+      } else {
+        toast.error(
+          res_data.extraDetails ? res_data.extraDetails : res_data.message
+        );
+        console.log("invalid credential");
       }
-    };
+
+    } catch (error) {
+      callback(error);
+    }
+  };
 
 export const logout = () => dispatch => {
   deleteToken();
