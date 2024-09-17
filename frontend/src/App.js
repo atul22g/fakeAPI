@@ -5,6 +5,7 @@ import LoginForm from './App/Auth/LoginForm';
 import SignupForm from './App/Auth/SignupForm';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
+import Dashboard from './App/dashboard/Dashboard';
 
 const App = () => {
   return (
@@ -23,9 +24,10 @@ const App = () => {
         bodyClassName="toastBody" />
       <BrowserRouter>
         <Routes>
-          <Route exact path="/" element={<Home />} />
-          <Route exact path="/login" element={<LoginForm />} />
-          <Route exact path="/signup" element={<SignupForm />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignupForm />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </>
