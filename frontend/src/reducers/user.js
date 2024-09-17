@@ -1,17 +1,23 @@
-import {ME, SUBSCRIPTION_UPDATE, LOGOUT} from '../actions/user';
+import { ME, SUBSCRIPTION_UPDATE, LOGOUT } from '../actions/user';
 
 const STATE = {
   isFetching: true,
   authorized: false,
+  userName: '',
+  userEmail: '',
+  userUserID: '',
 };
 
 const user = (state = STATE, action) => {
   switch (action.type) {
     case ME:
       return {
+
         isFetching: false,
         authorized: action.authorized,
-        ...action.user,
+        userName: action.user.name,
+        userEmail: action.user.email,
+        userUserID: action.user.userID,
       };
 
     case SUBSCRIPTION_UPDATE:
