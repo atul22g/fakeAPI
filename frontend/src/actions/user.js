@@ -123,10 +123,8 @@ export const checkout = plan => async dispatch => {
 export const login =
   ({ email, password, callback }) =>
     async dispatch => {
-      console.log("adfff");
-      console.log(email, password);
       const body = JSON.stringify({ email, password });
-      const headers = { 'Content-Type': 'application/json' };
+      const headers = { 'Content-Type': 'application/json', "Access-Control-Allow-Origin": "*" };
 
       let res = null;
       try {
@@ -135,16 +133,27 @@ export const login =
           headers,
           body,
         }).then(res => {
+
           if (res.status === UNAUTHORIZED) {
-            throw new Error('Incorrect email/password combination');
+            toast.warn("Incorrect email/password combination"); 
           }
           return res.json();
         });
+
+        const res_data = await res;
+
+        if (res_data.status === "warn") {
+          toast.warn("Incorrect email/password combination");
+        }else{
+          toast.success("Login successful");
+        }
 
         saveToken(res.token);
         await dispatch(me());
         callback();
       } catch (error) {
+        console.log("error", error);
+
         callback(error);
       }
     };
@@ -175,6 +184,7 @@ export const signup = ({ name, email, password, callback }) =>
       }
 
     } catch (error) {
+      console.log("error", error);
       callback(error);
     }
   };
