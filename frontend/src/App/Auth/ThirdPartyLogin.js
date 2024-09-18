@@ -6,6 +6,38 @@ import { useNavigate } from 'react-router-dom';
 
 const ThirdPartyLogin = () => {
     const navigate = useNavigate();
+    // Github Login
+    const ID = process.env.REACT_APP_GITHUB_CLIENTID;
+    const BURL = process.env.REACT_APP_BASE_URL;
+    const Redirect = 'http://localhost:3000/login';
+
+    let URL = `https://github.com/login/oauth/authorize?client_id=${ID}&redirect_uri=${Redirect}`;
+
+    // github Login 
+    const githubAuth = async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        
+        if (code) {
+            try {
+                const result = await axios.get(`http://localhost:5000/api/user/github?code=${code}`,{
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    }
+                });
+                const token = result.data.token;
+                localStorage.setItem('fakeAPIToken', token);
+                window.location.href = '/dashboard';
+            } catch (error) {
+                console.log("responseGithub :  " + error);
+            }
+        }
+    }
+    githubAuth()
+
+    // Google Login 
     const responseGoogle = async (response) => {
         try {
             if (response['code']) {
@@ -19,7 +51,6 @@ const ThirdPartyLogin = () => {
             console.log("responseGoogle :  " + error);
         }
     }
-
     let googleLogin = useGoogleLogin({
         onSuccess: responseGoogle,
         onError: responseGoogle,
@@ -28,31 +59,24 @@ const ThirdPartyLogin = () => {
 
     return (
         <div className="grid grid-cols-1 gap-4">
-            {/* <Button
+            <a href={URL}><Button
                 className="w-full"
+                style={{ width: '100%' }}
                 type="button"
-                disabled={isFetching}
-                isFetching={github}
-                onClick={() => {
-                    onClick('github');
-                    this.setState({
-                        isFetching: true,
-                        github: true,
-                    });
-                }}>
+            // onClick={githubLogin}
+            >
                 <span className="flex items-center justify-center gap-2">
                     <span>
                         <GithubIcon />
                     </span>
                     Sign in with Github
                 </span>
-            </Button> */}
+            </Button>
+            </a>
             <Button
                 className="w-full z-20"
-                // disabled={isFetching}
-                onClick={googleLogin}
-            // isFetching={google}
-            >
+                type="button"
+                onClick={googleLogin}>
                 <span className="flex items-center justify-center gap-2" >
                     <span className="transform scale-125">
                         <GoogleIcon />
@@ -69,40 +93,6 @@ export default ThirdPartyLogin
 
 
 
-
-
-
-
-
-
-
-// class ThirdPartyLogin extends Component {
-//     state = { isFetching: false, github: false, google: false };
-
-//     responseGoogle = async (response) => {
-//         try {
-//             console.log(response);
-//         } catch (error) {
-//             console.log("responseGoogle" + error);
-//         }
-//     }
-
-//     googleLogin = useGoogleLogin({
-//         onSuccess: this.responseGoogle,
-//         onError: this.responseGoogle,
-//         flow: 'auth-code',
-//     })
-
-
-//     render() {
-//         const { isFetching, github, google } = this.state;
-//         return (
-
-//         );
-//     }
-// }
-
-// export default ThirdPartyLogin;
 
 let GithubIcon = () => (
     <svg viewBox="0 0 24 24" width={16} height={16}>

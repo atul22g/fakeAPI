@@ -3,6 +3,7 @@ const User = require("../Schema/auth");
 const { oath2client } = require("../utils/googleConfig");
 const router = express.Router();
 const axios = require("axios");
+const { GetGitHubUser } = require("../utils/getGitHubUser");
 
 // Add User
 router.route("/create").get((req, res) => {
@@ -96,25 +97,65 @@ router.route("/google").get(async (req, res) => {
             `https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${googleOath.tokens.access_token}`
         )
         const { email, name } = userRes.data;
-        let user = await User.findOne({email});
+        let user = await User.findOne({ email });
         if (!user) {
-            user = await User.create({email, name, password: 'googleAuth'});
+            user = await User.create({ email, name, password: 'googleAuth' });
         }
-        // return res.status(200).json({
-        //     status: "success",
-        //     msg: "Login Successful",
-        //     token: await user.generateToken()
-        // });
         return res.status(200).json({
             status: "success",
             user,
             token: await user.generateToken()
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error });
     }
 });
 
+
+// auth Github
+router.route("/github").get(async (req, res) => {
+    try {
+        const { code } = req.query;
+
+        // Exchange code for access token
+        const tokenResponse = await axios.post(`https://github.com/login/oauth/access_token`, {
+            client_id: process.env.GITHUB_CLIENT_ID,
+            client_secret: process.env.GITHUB_SECRET_ID,
+            code,
+        }, {
+            headers: {
+                accept: 'application/json',
+            },
+        });
+
+        const accessToken = tokenResponse.data.access_token;
+
+        // Fetch user data
+        const userResponse = await axios.get(`https://api.github.com/user`, {
+            headers: {
+                Authorization: `token ${accessToken}`,
+            },
+        });
+
+        const { email, name, login } = userResponse.data;
+        let user;
+        if (!email) {
+            user = await User.findOne({ name: login });
+        } else {
+            user = await User.findOne({ email });
+        }
+        if (!user) {
+            user = await User.create({ email, name, password: 'githubAuth' });
+        }
+        return res.status(200).json({
+            status: "success",
+            user,
+            token: await user.generateToken()
+        });
+    } catch (error) {
+        res.status(500).json({ message: error });
+    }
+})
 
 
 
