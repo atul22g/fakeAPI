@@ -3,7 +3,6 @@ const User = require("../Schema/auth");
 const { oath2client } = require("../utils/googleConfig");
 const router = express.Router();
 const axios = require("axios");
-const { GetGitHubUser } = require("../utils/getGitHubUser");
 
 // Add User
 router.route("/create").get((req, res) => {
