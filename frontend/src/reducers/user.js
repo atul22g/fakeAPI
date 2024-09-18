@@ -11,13 +11,15 @@ const STATE = {
 const user = (state = STATE, action) => {
   switch (action.type) {
     case ME:
+      // console.log('action');
+      // console.log(action);
       return {
 
         isFetching: false,
         authorized: action.authorized,
-        userName: action.user.name,
-        userEmail: action.user.email,
-        userUserID: action.user.userID,
+        userUserID: action?.userUserID,
+        userName: action?.userName,
+        userEmail: action?.userEmail,
       };
 
     case SUBSCRIPTION_UPDATE:

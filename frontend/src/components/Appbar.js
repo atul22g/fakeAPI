@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavLink } from 'react-router-dom'
-import { getAuth } from '../actions/utils'
+import { getToken } from '../actions/utils'
+import Dropdown from './Dropdown'
+import { me } from '../actions/user'
+import { useDispatch } from 'react-redux'
 
 const Appbar = () => {
-    let auth = getAuth()
+    const Dispatch = useDispatch();
+    let auth = getToken()
     
+    useEffect(() => {
+        const fetchData = async () => {
+            await Dispatch(me());
+        }
+        fetchData();
+    }, [Dispatch]);
+
     return (
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 flex align-middle justify-between">
-                FakeAPI
+            FakeAPI
             <div className="flex items-center gap-3 font-mono">
                 <a
                     rel="noopener noreferrer"
@@ -16,9 +27,9 @@ const Appbar = () => {
                     Docs
                 </a>
                 {
-                    auth ? 
-                    <NavLink to="/dashboard" className="text-md font-semibold rounded-xl px-3 py-1 box-border border-2 border-gray-800 transition hover:bg-gray-200 active:scale-95"> Profile </NavLink>
-                    : <NavLink to="/login" className="text-md font-semibold rounded-xl px-3 py-1 box-border border-2 border-gray-800 transition hover:bg-gray-200 active:scale-95"> Login </NavLink>
+                    auth ?
+                    <Dropdown iconName="User" tooltip="User menu"/>
+                        : <NavLink to="/login" className="text-md font-semibold rounded-xl px-3 py-1 box-border border-2 border-gray-800 transition hover:bg-gray-200 active:scale-95"> Login </NavLink>
                 }
             </div>
         </div>

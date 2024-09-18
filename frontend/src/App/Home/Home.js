@@ -1,11 +1,11 @@
 import React from 'react'
 import Appbar from '../../components/Appbar'
 import Landing from '../../components/comman/Landing';
-import { getAuth } from '../../actions/utils';
+import { getToken } from '../../actions/utils';
 
 const Home = () => {
-    let auth = getAuth()
-    if (auth) {
+    let token = getToken()
+    if (token) {
         window.location.href = '/dashboard'
     }
     

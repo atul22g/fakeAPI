@@ -1,6 +1,4 @@
-import { DONATE, EMAIL_UPDATE } from '../reducers/forms';
-import { deleteToken, getToken, saveToken, saveAuth, deleteAuth } from './utils';
-import { handleFormError, hideForm, submitForm } from './forms';
+import { deleteToken, getToken, saveToken } from './utils';
 import { toast } from 'react-toastify';
 
 export const ME = 'auth/me';
@@ -32,11 +30,14 @@ export const me = callback => async dispatch => {
     let user_json = await user.json();
     let user_data = user_json.user;
 
-    saveAuth(user_data);
+    // console.log("user_data");
+
     dispatch({
       type: ME,
       authorized: true,
-      user: user_data,
+      userName: user_data.name,
+      userEmail: user_data.email,
+      userUserID: user_data.userId,
     });
 
     if (callback) {
@@ -158,8 +159,7 @@ export const login =
         callback();
         window.location.href = '/dashboard';
       } catch (error) {
-        console.log("error", error);
-
+        // console.log("error", error);
         callback(error);
       }
     };
@@ -201,10 +201,12 @@ export const signup = ({ name, email, password, callback }) =>
     }
   };
 
-// export const logout = () => dispatch => {
-//   deleteToken();
-//   deleteAuth();
-//   dispatch({
-//     type: LOGOUT,
-//   });
-// };
+
+export const logout = () => dispatch => {
+  console.log("logout");
+  deleteToken();
+  dispatch({
+    type: LOGOUT,
+  });
+  window.location.reload();
+};

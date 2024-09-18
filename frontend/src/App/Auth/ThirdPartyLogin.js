@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Button from '../../components/comman/Button/TextButton';
+import { GoogleLogin } from '@react-oauth/google';
 
 const onClick = provider => (window.location.href = `/auth/${provider}`);
 
@@ -29,25 +30,26 @@ class ThirdPartyLogin extends Component {
                         Sign in with Github
                     </span>
                 </Button>
-                <Button
-                    className="w-full"
-                    type="button"
-                    disabled={isFetching}
-                    isFetching={google}
-                    onClick={() => {
-                        onClick('google');
-                        this.setState({
-                            isFetching: true,
-                            google: true,
-                        });
-                    }}>
-                    <span className="flex items-center justify-center gap-2">
-                        <span className="transform scale-125">
-                            <GoogleIcon />
+                <GoogleLogin>
+                    <Button
+                        className="w-full z-20"
+                        disabled={isFetching}
+                        onSuccess={credentialResponse => {
+                            console.log(credentialResponse);
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                        isFetching={google}
+                    >
+                        <span className="flex items-center justify-center gap-2" >
+                            <span className="transform scale-125">
+                                <GoogleIcon />
+                            </span>
+                            Sign in with Google
                         </span>
-                        Sign in with Google
-                    </span>
-                </Button>
+                    </Button>
+                </GoogleLogin>
             </div>
         );
     }

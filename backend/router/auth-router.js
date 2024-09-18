@@ -67,7 +67,7 @@ router.route("/me").post(async (req, res) => {
     try {
         const { token } = req.body;
         let user = await User.findOne({ token });
-        console.log(user);
+        // console.log(user);
 
         if (!user) {
             return res.status(400).json({

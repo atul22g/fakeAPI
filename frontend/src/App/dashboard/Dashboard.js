@@ -1,10 +1,10 @@
 import React from 'react'
 import Appbar from '../../components/Appbar'
-import { getAuth } from '../../actions/utils'
+import { getToken } from '../../actions/utils'
 
 const Dashboard = () => {
-    let auth = getAuth()
-    if (!auth) {
+    let token = getToken()
+    if (!token) {
         window.location.href = '/login'
     }
 
