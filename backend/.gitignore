@@ -11,13 +11,10 @@
 # production
 /build
 
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.development
-.env.test
 .env
+.env.example
+.env.local
+.env.staging
 
 # misc
 .DS_Store
