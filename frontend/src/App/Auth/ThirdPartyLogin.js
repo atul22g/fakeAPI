@@ -1,61 +1,108 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Button from '../../components/comman/Button/TextButton';
-import { GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const onClick = provider => (window.location.href = `/auth/${provider}`);
-
-class ThirdPartyLogin extends Component {
-    state = { isFetching: false, github: false, google: false };
-
-    render() {
-        const { isFetching, github, google } = this.state;
-        return (
-            <div className="grid grid-cols-1 gap-4">
-                <Button
-                    className="w-full"
-                    type="button"
-                    disabled={isFetching}
-                    isFetching={github}
-                    onClick={() => {
-                        onClick('github');
-                        this.setState({
-                            isFetching: true,
-                            github: true,
-                        });
-                    }}>
-                    <span className="flex items-center justify-center gap-2">
-                        <span>
-                            <GithubIcon />
-                        </span>
-                        Sign in with Github
-                    </span>
-                </Button>
-                <GoogleLogin>
-                    <Button
-                        className="w-full z-20"
-                        disabled={isFetching}
-                        onSuccess={credentialResponse => {
-                            console.log(credentialResponse);
-                        }}
-                        onError={() => {
-                            console.log('Login Failed');
-                        }}
-                        isFetching={google}
-                    >
-                        <span className="flex items-center justify-center gap-2" >
-                            <span className="transform scale-125">
-                                <GoogleIcon />
-                            </span>
-                            Sign in with Google
-                        </span>
-                    </Button>
-                </GoogleLogin>
-            </div>
-        );
+const ThirdPartyLogin = () => {
+    const navigate = useNavigate();
+    const responseGoogle = async (response) => {
+        try {
+            if (response['code']) {
+                let res = response['code'];
+                const result = await axios.get(`http://localhost:5000/api/user/google?code=${res}`);
+                const token = result.data.token;
+                localStorage.setItem('fakeAPIToken', token);
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.log("responseGoogle :  " + error);
+        }
     }
+
+    let googleLogin = useGoogleLogin({
+        onSuccess: responseGoogle,
+        onError: responseGoogle,
+        flow: 'auth-code',
+    })
+
+    return (
+        <div className="grid grid-cols-1 gap-4">
+            {/* <Button
+                className="w-full"
+                type="button"
+                disabled={isFetching}
+                isFetching={github}
+                onClick={() => {
+                    onClick('github');
+                    this.setState({
+                        isFetching: true,
+                        github: true,
+                    });
+                }}>
+                <span className="flex items-center justify-center gap-2">
+                    <span>
+                        <GithubIcon />
+                    </span>
+                    Sign in with Github
+                </span>
+            </Button> */}
+            <Button
+                className="w-full z-20"
+                // disabled={isFetching}
+                onClick={googleLogin}
+            // isFetching={google}
+            >
+                <span className="flex items-center justify-center gap-2" >
+                    <span className="transform scale-125">
+                        <GoogleIcon />
+                    </span>
+                    Sign in with Google
+                </span>
+            </Button>
+        </div>
+    )
 }
 
-export default ThirdPartyLogin;
+export default ThirdPartyLogin
+
+
+
+
+
+
+
+
+
+
+
+// class ThirdPartyLogin extends Component {
+//     state = { isFetching: false, github: false, google: false };
+
+//     responseGoogle = async (response) => {
+//         try {
+//             console.log(response);
+//         } catch (error) {
+//             console.log("responseGoogle" + error);
+//         }
+//     }
+
+//     googleLogin = useGoogleLogin({
+//         onSuccess: this.responseGoogle,
+//         onError: this.responseGoogle,
+//         flow: 'auth-code',
+//     })
+
+
+//     render() {
+//         const { isFetching, github, google } = this.state;
+//         return (
+
+//         );
+//     }
+// }
+
+// export default ThirdPartyLogin;
 
 let GithubIcon = () => (
     <svg viewBox="0 0 24 24" width={16} height={16}>

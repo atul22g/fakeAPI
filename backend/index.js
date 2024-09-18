@@ -12,10 +12,12 @@ const port = 5000
 require("./Database/conn");
 
 
+// Home page
 app.get('/', (req, res) => {
     res.send('FakeAPI Backend')
 })
 
+// Auth route
 app.use("/api/user", authRoute);
 
 

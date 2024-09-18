@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 const Appbar = () => {
     const Dispatch = useDispatch();
     let auth = getToken()
-    
+
     useEffect(() => {
         const fetchData = async () => {
             await Dispatch(me());

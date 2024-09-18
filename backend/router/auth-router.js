@@ -1,6 +1,8 @@
 const express = require("express");
 const User = require("../Schema/auth");
+const { oath2client } = require("../utils/googleConfig");
 const router = express.Router();
+const axios = require("axios");
 
 // Add User
 router.route("/create").get((req, res) => {
@@ -15,7 +17,7 @@ router.route("/create").post(async (req, res) => {
         return res.status(400).json({ message: "email already exists" });
     }
 
-    const userCreated = await User.create({ name, email, password, tokken });
+    const userCreated = await User.create({ name, email, password });
     res.status(201).json({
         msg: "registration successful",
         token: await userCreated.generateToken(),
@@ -35,13 +37,7 @@ router.route("/auth").post(async (req, res) => {
         }
 
         const user = await userExist.comparePassword(password);
-        await User.updateMany(
-            { email: email },
-            {
-                $set: {
-                    tokken: tokken
-                },
-            })
+
         if (user) {
             res.status(200).json({
                 status: "success",
@@ -83,6 +79,37 @@ router.route("/me").post(async (req, res) => {
                 },
             });
         }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+
+// auth Google
+router.route("/google").get(async (req, res) => {
+    try {
+        const { code } = req.query;
+        const googleOath = await oath2client.getToken(code);
+        oath2client.setCredentials(googleOath.tokens);
+        const userRes = await axios.get(
+            `https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${googleOath.tokens.access_token}`
+        )
+        const { email, name } = userRes.data;
+        let user = await User.findOne({email});
+        if (!user) {
+            user = await User.create({email, name, password: 'googleAuth'});
+        }
+        // return res.status(200).json({
+        //     status: "success",
+        //     msg: "Login Successful",
+        //     token: await user.generateToken()
+        // });
+        return res.status(200).json({
+            status: "success",
+            user,
+            token: await user.generateToken()
+        });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
