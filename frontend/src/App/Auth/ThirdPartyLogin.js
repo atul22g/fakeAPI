@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Oath } from '../../store/slices/authSlice';
+import { toast } from 'react-toastify';
 
 const ThirdPartyLogin = () => {
     const navigate = useNavigate();
@@ -35,9 +36,10 @@ const ThirdPartyLogin = () => {
                 const ID = result.data.user._id;
                 
                 localStorage.setItem('fakeAPI_ID', ID);
-                navigate('/dashboard');
+                window.location.href = '/dashboard';
             } catch (error) {
                 console.log("responseGithub :  " + error);
+                toast.error("Github Login failed");
             }
         }
     }
@@ -56,6 +58,7 @@ const ThirdPartyLogin = () => {
             }
         } catch (error) {
             console.log("responseGoogle :  " + error);
+            toast.error("Google Login failed");
         }
     }
     let googleLogin = useGoogleLogin({

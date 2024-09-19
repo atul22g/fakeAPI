@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -41,21 +40,21 @@ userSchema.methods.comparePassword = async function (password) {
 };
 
 // json web token
-userSchema.methods.generateToken = async function () {
-    try {
-        return jwt.sign(
-            {
-                userId: this._id.toString()
-            },
-            process.env.JWT_SECRET_KEY,
-            {
-                expiresIn: "30d",
-            }
-        );
-    } catch (error) {
-        console.error(error);
-    }
-};
+// userSchema.methods.generateToken = async function () {
+//     try {
+//         return jwt.sign(
+//             {
+//                 userId: this._id.toString()
+//             },
+//             process.env.JWT_SECRET_KEY,
+//             {
+//                 expiresIn: "30d",
+//             }
+//         );
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
 
 // define the model or the collection name
 const User = new mongoose.model("User", userSchema);

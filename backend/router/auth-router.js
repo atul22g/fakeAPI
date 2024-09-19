@@ -20,7 +20,7 @@ router.route("/create").post(async (req, res) => {
     const userCreated = await User.create({ name, email, password });
     res.status(201).json({
         msg: "registration successful",
-        token: await userCreated.generateToken(),
+        // token: await userCreated.generateToken(),
         userId: userCreated._id.toString(),
     });
 });
@@ -42,7 +42,7 @@ router.route("/auth").post(async (req, res) => {
             res.status(200).json({
                 status: "success",
                 msg: "Login Successful",
-                token: await userExist.generateToken(),
+                // token: await userExist.generateToken(),
                 userId: userExist._id.toString(),
             });
         }
@@ -103,7 +103,7 @@ router.route("/google").get(async (req, res) => {
         return res.status(200).json({
             status: "success",
             user,
-            token: await user.generateToken()
+            // token: await user.generateToken()
         });
     } catch (error) {
         res.status(500).json({ message: error });
@@ -149,7 +149,7 @@ router.route("/github").get(async (req, res) => {
         return res.status(200).json({
             status: "success",
             user,
-            token: await user.generateToken()
+            // token: await user.generateToken()
         });
     } catch (error) {
         res.status(500).json({ message: error });
