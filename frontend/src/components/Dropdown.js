@@ -5,16 +5,29 @@ import Button from './comman/Button/TextButton';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const Menu = () => {
     const dispatch = useDispatch();
+    const Navigation = useNavigate();
     const name = useSelector(state => state.auth.user.name);
 
     return (
         <div className="absolute w-64 z-20 rounded-xl bg-gray-200 px-2 py-2 mt-1 shadow-lg border border-gray-300 right-0"
             style={{ opacity: 1, transform: 'translateY(0px) scale(1)' }}>
             <div className="px-3 py-2 text-xs text-gray-500 font-semibold">Hi, {name}!</div>
+            <div onClick={() => Navigation('/dashboard')} className="cursor-pointer flex items-center whitespace-nowrap text-sm font-normal font-mono rounded-xl px-3 py-2 active:bg-blue-600"
+                index="2"
+                id="downshift-0-item-2"
+                role="option"
+                aria-selected="false">
+                <div className="mr-3">
+                    <i className="fa-solid fa-house"></i>
+                </div>
+                Home
+            </div>
+            {/* Logout */}
             <div className="cursor-pointer flex items-center whitespace-nowrap text-sm font-normal font-mono rounded-xl px-3 py-2 active:bg-blue-600"
 
                 index="2"

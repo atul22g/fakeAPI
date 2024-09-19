@@ -39,13 +39,14 @@ export const signin = createAsyncThunk(
                 body: JSON.stringify(user),
             });
             const res_data = await res.json();
-            console.log(res_data);
+            console.log('res_data.userId');
+            console.log(res_data.userId);
 
             if (res_data.status === 'success') {
                 toast.success("Signin successful");
-                localStorage.setItem('fakeAPIToken', res_data.token)
-                return res_data;
+                localStorage.setItem('fakeAPI_ID', res_data.userId)
                 window.location.href = '/dashboard';
+                return res_data;
             } else {
                 toast.warn("Invalid credentials");
             }
@@ -60,7 +61,8 @@ export const signin = createAsyncThunk(
 // setAuth thunk
 export const setAuth = createAsyncThunk(
     'auth/setAuth',
-    async (token, { rejectWithValue }) => {
+    async (ID, { rejectWithValue }) => {
+        
         try {
             const res = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/user/me', {
                 method: 'POST',
@@ -68,15 +70,13 @@ export const setAuth = createAsyncThunk(
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*"
                 },
-                body: JSON.stringify({ token }),
+                body: JSON.stringify({ ID }),
             });
             const res_data = await res.json();
-
             return res_data;
         } catch (error) {
             return rejectWithValue(error.message);
         }
-
     }
 );
 
@@ -93,11 +93,17 @@ const authSlice = createSlice({
     reducers: {
         logout: (state, action) => {
             console.log('logout');
-            localStorage.removeItem('fakeAPIToken', null);
+            localStorage.removeItem('fakeAPI_ID', null);
             state.user = {};
             state.token = '';
             state.isAuthenticated = false;
             window.location.href = '/';
+        },
+        Oath: (state, action) => {
+            state.user = action.payload.user;
+            state.token = action.payload.token;
+            state.isAuthenticated = true;
+            state.error = null;
         }
     },
     extraReducers: (builder) => {
@@ -133,5 +139,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, Oath } = authSlice.actions;
 export default authSlice.reducer;

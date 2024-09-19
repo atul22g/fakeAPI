@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './App/Home/Home';
 import LoginForm from './App/Auth/LoginForm';
 import SignupForm from './App/Auth/SignupForm';
@@ -12,17 +12,13 @@ import { setAuth } from './store/slices/authSlice';
 
 const AuthHandler = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('fakeAPIToken');
-
-
-    if (token !== null) {
-      dispatch(setAuth(token));
-      navigate('/dashboard');
+    const ID = localStorage.getItem('fakeAPI_ID');
+    if (ID !== null) {
+      dispatch(setAuth(ID));
     }
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
   return null;
 };

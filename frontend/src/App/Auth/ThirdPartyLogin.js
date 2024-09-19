@@ -3,13 +3,17 @@ import Button from '../../components/comman/Button/TextButton';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Oath } from '../../store/slices/authSlice';
 
 const ThirdPartyLogin = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     // Github Login
     const ID = process.env.REACT_APP_GITHUB_CLIENTID;
-    const BURL = process.env.REACT_APP_BASE_URL;
-    const Redirect = 'http://localhost:3000/login';
+    const ClientURL = process.env.REACT_APP_BASE_URL;
+    const ServerURL = process.env.REACT_APP_BACKEND_URL;
+    const Redirect = `${ClientURL}/login`;
 
     let URL = `https://github.com/login/oauth/authorize?client_id=${ID}&redirect_uri=${Redirect}`;
 
@@ -17,19 +21,21 @@ const ThirdPartyLogin = () => {
     const githubAuth = async () => {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        
+
         if (code) {
             try {
-                const result = await axios.get(`http://localhost:5000/api/user/github?code=${code}`,{
+                const result = await axios.get(`${ServerURL}/api/user/github?code=${code}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                         'Access-Control-Allow-Origin': '*'
                     }
                 });
-                const token = result.data.token;
-                localStorage.setItem('fakeAPIToken', token);
-                window.location.href = '/dashboard';
+                dispatch(Oath(result.data));
+                const ID = result.data.user._id;
+                
+                localStorage.setItem('fakeAPI_ID', ID);
+                navigate('/dashboard');
             } catch (error) {
                 console.log("responseGithub :  " + error);
             }
@@ -42,9 +48,10 @@ const ThirdPartyLogin = () => {
         try {
             if (response['code']) {
                 let res = response['code'];
-                const result = await axios.get(`http://localhost:5000/api/user/google?code=${res}`);
-                const token = result.data.token;
-                localStorage.setItem('fakeAPIToken', token);
+                const result = await axios.get(`${ServerURL}/api/user/google?code=${res}`);
+                dispatch(Oath(result.data));
+                const ID = result.data.user._id;
+                localStorage.setItem('fakeAPI_ID', ID);
                 navigate('/dashboard');
             }
         } catch (error) {

@@ -61,11 +61,9 @@ router.route("/auth").post(async (req, res) => {
 // get user
 router.route("/me").post(async (req, res) => {
     try {
-        const { token } = req.body;
-        console.log(token);
+        const { ID } = req.body;
         
-        let user = await User.findOne({ token });
-        // console.log(user);
+        let user = await User.findOne({ _id: ID });
 
         if (!user) {
             return res.status(400).json({
@@ -74,7 +72,6 @@ router.route("/me").post(async (req, res) => {
         } else {
             res.status(200).json({
                 status: "success",
-                token: token,
                 user: {
                     name: user.name,
                     email: user.email,

@@ -2,8 +2,8 @@ import React from 'react'
 import Appbar from '../../components/Appbar'
 
 const Dashboard = () => {
-    const token = localStorage.getItem('fakeAPIToken');
-    if (!token) {
+    const ID = localStorage.getItem('fakeAPI_ID');
+    if (!ID) {
         window.location.href = '/login'
     }
 
