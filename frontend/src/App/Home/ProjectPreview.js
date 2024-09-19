@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { cloneDeep, each, filter, noop, uniqueId } from 'lodash';
 
-import { ResourceTree } from '../../components/comman/ResourceTree/ResourceTree';
+import ResourceTree from '../../components/comman/ResourceTree/ResourceTree';
 import fakeProject from '../../components/comman/Landing/fakeProject';
 import Button from '../../components/comman/Button/TextButton';
 

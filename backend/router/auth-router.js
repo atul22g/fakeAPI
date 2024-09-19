@@ -27,7 +27,7 @@ router.route("/create").post(async (req, res) => {
 // Auth User
 router.route("/auth").post(async (req, res) => {
     try {
-        const { email, password, tokken } = req.body;
+        const { email, password } = req.body;
         const userExist = await User.findOne({ email });
         if (!userExist) {
             return res.status(400).json({
@@ -62,6 +62,8 @@ router.route("/auth").post(async (req, res) => {
 router.route("/me").post(async (req, res) => {
     try {
         const { token } = req.body;
+        console.log(token);
+        
         let user = await User.findOne({ token });
         // console.log(user);
 
@@ -72,6 +74,7 @@ router.route("/me").post(async (req, res) => {
         } else {
             res.status(200).json({
                 status: "success",
+                token: token,
                 user: {
                     name: user.name,
                     email: user.email,

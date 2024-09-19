@@ -1,13 +1,13 @@
 import React from 'react'
 import Appbar from '../../components/Appbar'
 import Landing from '../../components/comman/Landing';
-import { getToken } from '../../actions/utils';
+// import { getToken } from '../../_actions/utils';
 
 const Home = () => {
-    let token = getToken()
-    if (token) {
-        window.location.href = '/dashboard'
-    }
+    // let token = getToken()
+    // if (token) {
+    //     window.location.href = '/dashboard'
+    // }
     
     return (
         <div className="min-h-full font-mono text-gray-900">

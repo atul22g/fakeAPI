@@ -6,7 +6,7 @@ import {
   CLONE_PROJECT,
   DELETE_PROJECT,
   COLLABORATORS,
-} from '../reducers/forms';
+} from '../_reducers/forms';
 
 export const FETCH_FAILURE = 'projects/fetchFailure';
 export const FETCH_SUCCESS = 'projects/fetchSuccess';

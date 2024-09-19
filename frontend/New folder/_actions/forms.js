@@ -1,4 +1,4 @@
-import {formStatus} from '../reducers/forms';
+import {formStatus} from '../_reducers/forms';
 
 export const FORM_SHOW = 'forms/show';
 export const FORM_HIDE = 'forms/hide';

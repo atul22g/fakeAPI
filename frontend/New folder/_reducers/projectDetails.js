@@ -1,10 +1,10 @@
-import {LOGOUT} from '../actions/user';
+import {LOGOUT} from '../_actions/user';
 import {
   FETCH,
   FETCH_SUCCESS,
   FETCH_FAILURE,
   RESOURCE_SELECT,
-} from '../actions/projectDetails';
+} from '../_actions/projectDetails';
 import {
   findResource,
   findParentResource,
@@ -19,15 +19,15 @@ import {
   RESOURCE_UPDATE_SUCCESS,
   RESOURCE_DELETE_SUCCESS,
   RELATION_UPDATE_SUCCESS,
-} from '../actions/resources';
+} from '../_actions/resources';
 import {
   GENERATE,
   GENERATE_ALL,
   RESET_ALL,
   GENERATE_SUCCESS,
   GENERATE_FAILURE,
-} from '../actions/data';
-import {UPDATE_SUCCESS} from '../actions/projects';
+} from '../_actions/data';
+import {UPDATE_SUCCESS} from '../_actions/projects';
 
 const STATE = {
   isFetching: false,

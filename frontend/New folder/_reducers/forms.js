@@ -5,9 +5,9 @@ import {
   FORM_SUBMIT,
   FORM_SUBMIT_FAILURE,
   FORM_SUBMIT_SUCCESS,
-} from '../actions/forms';
+} from '../_actions/forms';
 
-import {LOGOUT} from '../actions/user';
+import {LOGOUT} from '../_actions/user';
 
 export const DONATE = 'donate';
 export const EMAIL_UPDATE = 'updateEmail';

@@ -7,7 +7,7 @@ import {
   handleFormError,
   handleFormSuccess,
 } from './forms';
-import {RESOURCE_DATA} from '../reducers/forms';
+import {RESOURCE_DATA} from '../_reducers/forms';
 
 export const GENERATE = 'data/generate';
 export const GENERATE_SUCCESS = 'data/generateSuccess';

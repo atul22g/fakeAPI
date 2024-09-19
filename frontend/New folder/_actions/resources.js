@@ -1,4 +1,4 @@
-import {DELETE_RESOURCE, EDIT_RESOURCE, NEW_RESOURCE} from '../reducers/forms';
+import {DELETE_RESOURCE, EDIT_RESOURCE, NEW_RESOURCE} from '../_reducers/forms';
 import {handleFormError, hideForm, submitForm} from './forms';
 
 import {getToken} from './utils';
